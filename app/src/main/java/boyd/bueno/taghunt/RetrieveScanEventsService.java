@@ -41,6 +41,7 @@ public class RetrieveScanEventsService extends Service {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
             boolean actionBarNotification = prefs.getBoolean("checkbox_notifications_action_bar_preference", true);
+            boolean vibrationNotification = prefs.getBoolean("checkbox_notifications_vibrate_preference", true);
 
             if (actionBarNotification) {
                 Notification.Builder builder = new Notification.Builder(this)
@@ -54,11 +55,15 @@ public class RetrieveScanEventsService extends Service {
                 notificationManager.notify(1, builder.build());
             }
 
-            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (vibrationNotification) {
+                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-            long[] pattern = {0, 300, 300, 300};
+                long[] pattern = {0, 300, 300, 300};
 
-            v.vibrate(pattern, -1);
+                v.vibrate(pattern, -1);
+            }
+
+
 
             int randomId = r.nextInt(20);
 

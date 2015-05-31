@@ -9,6 +9,12 @@
             android:title="Action bar"
             android:defaultValue="true" />
 
+        <CheckBoxPreference
+            android:key="checkbox_notifications_vibrate_preference"
+            android:summary="Vibrate on new event"
+            android:title="Vibrate"
+            android:defaultValue="true" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>
