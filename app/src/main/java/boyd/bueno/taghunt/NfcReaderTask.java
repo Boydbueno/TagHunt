@@ -7,15 +7,25 @@ import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
+
+import boyd.bueno.taghunt.adapters.EventAdapter;
+import boyd.bueno.taghunt.entities.TagEvent;
 
 /**
  * Background task for reading the data.
  */
-class NdefReaderTask extends AsyncTask<Tag, Void, String> {
+class NfcReaderTask extends AsyncTask<Tag, Void, String> {
+
+    private ArrayList<TagEvent> events;
+    private EventAdapter eventAdapter;
+
+    public NfcReaderTask(ArrayList<TagEvent> events, EventAdapter eventAdapter) {
+        this.events = events;
+        this.eventAdapter = eventAdapter;
+    }
 
     @Override
     protected String doInBackground(Tag... params) {
@@ -57,11 +67,9 @@ class NdefReaderTask extends AsyncTask<Tag, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-
-        JSONObject data;
-
         if (result != null) {
-            Log.d("test", result);
+            events.add(new TagEvent(result));
+            eventAdapter.notifyDataSetChanged();
         }
     }
 }
