@@ -7,6 +7,10 @@ import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,9 +71,15 @@ class NfcReaderTask extends AsyncTask<Tag, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+        int id = 0;
+        try {
+            id = new JSONObject(result).getInt("id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         if (result != null) {
             // Todo: Actually not the responsibility of this class
-            events.add(new TagEvent(result));
+            events.add(new TagEvent("You scanned tag with id " + id + "!"));
             eventAdapter.notifyDataSetChanged();
         }
     }
