@@ -3,6 +3,7 @@ package boyd.bueno.taghunt;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -34,10 +35,15 @@ public class RetrieveScanEventsService extends Service {
         int roll = r.nextInt(max - min + 1) + min;
 
         if (roll >= 30) {
+            Intent contentTntent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, contentTntent, 0);
+
             Notification.Builder builder = new Notification.Builder(this)
                     .setSmallIcon(R.drawable.ic_launcher)
                     .setContentTitle("A friend found a tag!")
-                    .setContentText("Boyd Bueno de Mesquita has found tag with id 12!");
+                    .setContentText("Boyd Bueno de Mesquita has found tag with id 12!")
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(1, builder.build());

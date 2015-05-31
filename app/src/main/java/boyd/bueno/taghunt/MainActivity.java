@@ -102,8 +102,12 @@ public class MainActivity extends Activity {
 
     @Override
     public void onNewIntent(Intent intent) {
+
         Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        new NfcReaderTask(events, eventAdapter).execute(tagFromIntent);
+
+        if(tagFromIntent != null ) {
+            new NfcReaderTask(events, eventAdapter).execute(tagFromIntent);
+        }
     }
 
     private void lookForNFCTag() {
