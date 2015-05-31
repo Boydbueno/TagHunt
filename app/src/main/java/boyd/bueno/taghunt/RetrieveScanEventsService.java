@@ -47,7 +47,7 @@ public class RetrieveScanEventsService extends Service {
             boolean smsNotification = prefs.getBoolean("checkbox_notifications_sms_preference", false);
             String phoneNumber = prefs.getString("edit_text_phone_number_preference", "");
 
-            int randomId = r.nextInt(100);
+            int randomId = r.nextInt(20);
             String message = "Boyd Bueno de Mesquita has found tag with id " + randomId + "!";
 
             if (actionBarNotification) {
