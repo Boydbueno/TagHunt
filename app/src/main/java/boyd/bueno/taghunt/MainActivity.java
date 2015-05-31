@@ -164,15 +164,11 @@ public class MainActivity extends Activity {
 
     @OnClick(R.id.print)
     public void print(View view) {
-        // image naming and path  to include sd card  appending name you choose for file
-        String mPath = Environment.getExternalStorageDirectory().toString() + "/temp_screenshot";
-
-        // create bitmap screen capture
         Bitmap bitmap;
-        View v1 = getWindow().getDecorView().getRootView();
-        v1.setDrawingCacheEnabled(true);
-        bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-        v1.setDrawingCacheEnabled(false);
+        View rootView = getWindow().getDecorView().getRootView();
+        rootView.setDrawingCacheEnabled(true);
+        bitmap = Bitmap.createBitmap(rootView.getDrawingCache());
+        rootView.setDrawingCacheEnabled(false);
 
         PrintHelper photoPrinter = new PrintHelper(view.getContext());
         photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
