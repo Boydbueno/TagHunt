@@ -68,6 +68,7 @@ class NfcReaderTask extends AsyncTask<Tag, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if (result != null) {
+            // Todo: Actually not the responsibility of this class
             events.add(new TagEvent(result));
             eventAdapter.notifyDataSetChanged();
         }
