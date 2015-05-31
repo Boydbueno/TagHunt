@@ -6,10 +6,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcF;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,10 +79,10 @@ public class MainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         switch(id) {
-//            case R.id.action_scan:
-//                Intent intent = new Intent(this, ScanActivity.class);
-//                startActivityForResult(intent, 0);
-//                return true;
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

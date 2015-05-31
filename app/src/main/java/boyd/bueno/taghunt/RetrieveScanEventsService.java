@@ -7,7 +7,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
@@ -31,20 +33,27 @@ public class RetrieveScanEventsService extends Service {
         Random r = new Random();
         int roll = r.nextInt(100);
 
-        if (roll >= 30) {
+        if (roll >= 0) {
             Intent contentTntent = new Intent(this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, contentTntent, 0);
 
-            Notification.Builder builder = new Notification.Builder(this)
-                    .setSmallIcon(R.drawable.ic_launcher)
-                    .setContentTitle("A friend found a tag!")
-                    .setContentText("Boyd Bueno de Mesquita has found tag with id 12!")
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(1);
-            notificationManager.notify(1, builder.build());
+            boolean actionBarNotification = prefs.getBoolean("checkbox_notifications_action_bar_preference", true);
+
+            if (actionBarNotification) {
+                Notification.Builder builder = new Notification.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("A friend found a tag!")
+                        .setContentText("Boyd Bueno de Mesquita has found tag with id 12!")
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true);
+
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(1, builder.build());
+            }
+
+
 
             int randomId = r.nextInt(20);
 
