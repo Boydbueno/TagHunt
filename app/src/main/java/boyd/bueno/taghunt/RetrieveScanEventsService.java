@@ -46,6 +46,7 @@ public class RetrieveScanEventsService extends Service {
                     .setAutoCancel(true);
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(1);
             notificationManager.notify(1, builder.build());
 
             sendLocalBroadcast("Boyd Bueno de Mesquita has found tag with id 12!");
