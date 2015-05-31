@@ -158,8 +158,4 @@ public class MainActivity extends Activity {
 
         photoPrinter.printBitmap("Print your feed!", bitmap);
     }
-
-    public void updateFeed() {
-        eventAdapter.notifyDataSetChanged();
-    }
 }
