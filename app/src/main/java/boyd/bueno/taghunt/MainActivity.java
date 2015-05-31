@@ -17,9 +17,13 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.print.PrintHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.File;
@@ -70,6 +74,19 @@ public class MainActivity extends Activity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 new MessageReceiver(events, eventAdapter), new IntentFilter("newTagEvent"));
+
+        // Todo: I know, this is rather ugly. Sorry. :(
+        eventsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TranslateAnimation mAnimation = new TranslateAnimation(0, 100, 0, 0);
+                mAnimation.setDuration(200);
+                mAnimation.setFillAfter(true);
+                mAnimation.setRepeatCount(1);
+                mAnimation.setRepeatMode(Animation.REVERSE);
+                view.setAnimation(mAnimation);
+            }
+        });
 
         lookForNFCTag();
     }
@@ -158,4 +175,5 @@ public class MainActivity extends Activity {
 
         photoPrinter.printBitmap("Print your feed!", bitmap);
     }
+
 }
