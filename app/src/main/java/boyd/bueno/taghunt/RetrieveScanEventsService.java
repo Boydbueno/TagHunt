@@ -12,9 +12,11 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.telephony.SmsManager;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import boyd.bueno.taghunt.entities.TagEvent;
@@ -42,12 +44,17 @@ public class RetrieveScanEventsService extends Service {
 
             boolean actionBarNotification = prefs.getBoolean("checkbox_notifications_action_bar_preference", true);
             boolean vibrationNotification = prefs.getBoolean("checkbox_notifications_vibrate_preference", true);
+            boolean smsNotification = prefs.getBoolean("checkbox_notifications_sms_preference", false);
+            String phoneNumber = prefs.getString("edit_text_phone_number_preference", "");
+
+            int randomId = r.nextInt(100);
+            String message = "Boyd Bueno de Mesquita has found tag with id " + randomId + "!";
 
             if (actionBarNotification) {
                 Notification.Builder builder = new Notification.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("A friend found a tag!")
-                        .setContentText("Boyd Bueno de Mesquita has found tag with id 12!")
+                        .setContentText(message)
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true);
 
@@ -57,17 +64,17 @@ public class RetrieveScanEventsService extends Service {
 
             if (vibrationNotification) {
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
                 long[] pattern = {0, 300, 300, 300};
-
                 v.vibrate(pattern, -1);
             }
 
+            if (smsNotification && !Objects.equals(phoneNumber, "")) {
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+            }
 
 
-            int randomId = r.nextInt(20);
-
-            sendLocalBroadcast("Boyd Bueno de Mesquita has found tag with id " + randomId + "!");
+            sendLocalBroadcast(message);
         }
 
         return Service.START_NOT_STICKY;
