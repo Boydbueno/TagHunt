@@ -18,6 +18,7 @@
         <EditTextPreference
             android:key="edit_text_phone_number_preference"
             android:summary="Only used for sms notifications. Make sure you add country code"
+            android:title="Phone number"
             android:hint="+31612345678" />
 
         <CheckBoxPreference
