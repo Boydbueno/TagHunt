@@ -28,11 +28,8 @@ public class RetrieveScanEventsService extends Service {
 
 
         // Will fake this with a 30% chance of a new event
-        int min = 0;
-        int max = 100;
-
         Random r = new Random();
-        int roll = r.nextInt(max - min + 1) + min;
+        int roll = r.nextInt(100);
 
         if (roll >= 30) {
             Intent contentTntent = new Intent(this, MainActivity.class);
@@ -49,7 +46,9 @@ public class RetrieveScanEventsService extends Service {
             notificationManager.cancel(1);
             notificationManager.notify(1, builder.build());
 
-            sendLocalBroadcast("Boyd Bueno de Mesquita has found tag with id 12!");
+            int randomId = r.nextInt(20);
+
+            sendLocalBroadcast("Boyd Bueno de Mesquita has found tag with id " + randomId + "!");
         }
 
         return Service.START_NOT_STICKY;
