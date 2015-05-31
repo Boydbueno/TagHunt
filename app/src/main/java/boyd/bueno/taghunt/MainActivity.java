@@ -1,18 +1,22 @@
 package boyd.bueno.taghunt;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcF;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import boyd.bueno.taghunt.adapters.EventAdapter;
 import boyd.bueno.taghunt.entities.TagEvent;
@@ -24,7 +28,7 @@ public class MainActivity extends Activity {
 
     @InjectView(R.id.events_list) ListView eventsList;
 
-    private NfcAdapter mAdapter;
+    private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
     private IntentFilter[] intentFiltersArray;
     private String[][] techListsArray;
@@ -43,6 +47,16 @@ public class MainActivity extends Activity {
 
         eventAdapter = new EventAdapter(this, events);
         eventsList.setAdapter(eventAdapter);
+
+        Calendar cal = Calendar.getInstance();
+        Intent intent = new Intent(this, RetrieveScanEventsService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
+        AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES / 15, pendingIntent);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                new MessageReceiver(events, eventAdapter), new IntentFilter("newTagEvent"));
 
         lookForNFCTag();
     }
@@ -75,13 +89,15 @@ public class MainActivity extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        mAdapter.disableForegroundDispatch(this);
+        nfcAdapter.disableForegroundDispatch(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.enableForegroundDispatch(this, pendingIntent, intentFiltersArray, techListsArray);
+        events.clear();
+        events.addAll(TagEvent.listAll(TagEvent.class));
+        nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFiltersArray, techListsArray);
     }
 
     @Override
@@ -92,7 +108,7 @@ public class MainActivity extends Activity {
 
     private void lookForNFCTag() {
 
-        mAdapter = NfcAdapter.getDefaultAdapter(this);
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         pendingIntent = PendingIntent.getActivity(
                 this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
@@ -106,5 +122,9 @@ public class MainActivity extends Activity {
         intentFiltersArray = new IntentFilter[]{ndef,};
 
         techListsArray = new String[][]{new String[]{NfcF.class.getName()}};
+    }
+
+    public void updateFeed() {
+        eventAdapter.notifyDataSetChanged();
     }
 }

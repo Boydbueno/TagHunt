@@ -27,6 +27,13 @@
                 <data android:mimeType="tag/hunt" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".RetrieveScanEventsService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.NFC">
+        </service>
     </application>
 
 </manifest>
