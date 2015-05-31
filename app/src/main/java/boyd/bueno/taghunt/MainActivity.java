@@ -108,8 +108,12 @@ public class MainActivity extends Activity {
         //noinspection SimplifiableIfStatement
         switch(id) {
             case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivityForResult(intent, 0);
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivityForResult(settingsIntent, 0);
+                return true;
+            case R.id.action_credits:
+                Intent creditsIntent = new Intent(this, CreditsActivity.class);
+                startActivityForResult(creditsIntent, 0);
                 return true;
         }
 
