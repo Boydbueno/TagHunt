@@ -7,16 +7,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcF;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.print.PrintHelper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -24,6 +34,7 @@ import boyd.bueno.taghunt.adapters.EventAdapter;
 import boyd.bueno.taghunt.entities.TagEvent;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 public class MainActivity extends Activity {
@@ -128,6 +139,24 @@ public class MainActivity extends Activity {
         intentFiltersArray = new IntentFilter[]{ndef,};
 
         techListsArray = new String[][]{new String[]{NfcF.class.getName()}};
+    }
+
+    @OnClick(R.id.print)
+    public void print(View view) {
+        // image naming and path  to include sd card  appending name you choose for file
+        String mPath = Environment.getExternalStorageDirectory().toString() + "/temp_screenshot";
+
+        // create bitmap screen capture
+        Bitmap bitmap;
+        View v1 = getWindow().getDecorView().getRootView();
+        v1.setDrawingCacheEnabled(true);
+        bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+        v1.setDrawingCacheEnabled(false);
+
+        PrintHelper photoPrinter = new PrintHelper(view.getContext());
+        photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+
+        photoPrinter.printBitmap("Print your feed!", bitmap);
     }
 
     public void updateFeed() {
