@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
@@ -53,7 +54,11 @@ public class RetrieveScanEventsService extends Service {
                 notificationManager.notify(1, builder.build());
             }
 
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
+            long[] pattern = {0, 300, 300, 300};
+
+            v.vibrate(pattern, -1);
 
             int randomId = r.nextInt(20);
 

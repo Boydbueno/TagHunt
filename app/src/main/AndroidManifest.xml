@@ -3,6 +3,7 @@
     package="boyd.bueno.taghunt" >
 
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:name="com.orm.SugarApp"
